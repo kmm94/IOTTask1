@@ -20,8 +20,23 @@ py = Pytrack()
 lightsensor = LTR329ALS01()
 humiAndTempSensor = SI7006A20()
 isRunning = True
+isReciving = False
+ligthThreshold = 1000
 
 while isRunning:
     print('Device is ready to recive')
+    while(isReciving == False):
+        lightTuple = lightsensor.light()
+        lightIntensity = lightTuple[0]+lightTuple[1]
+        if(lightIntensity > ligthThreshold):
+            break
+    print('reciving')
+    timer = time.time
+    while timer <= 5:
+        timer = time.time
+    
         
+    
+
+
 
