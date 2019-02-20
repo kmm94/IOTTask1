@@ -8,6 +8,7 @@ import time
 # The message will be send one bit at a time were 
 # no ligth for one sec means 0 
 # light for one sec means 1
+# Each letter is 8 bits!
 # the message will end with the LED being turn off for 8 sec
 
 
@@ -22,6 +23,10 @@ humiAndTempSensor = SI7006A20()
 isRunning = True
 isReciving = False
 ligthThreshold = 1000
+
+def text_from_bits(bits, encoding='utf-8', errors='surrogatepass'):
+    n = int(bits, 2)
+    return n.to_bytes((n.bit_length() + 7) // 8, 'big').decode(encoding, errors) or '\0'
 
 while isRunning:
     print('Device is ready to recive')
