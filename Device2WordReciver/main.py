@@ -34,7 +34,9 @@ def bitLen(int_type):
 #Metode to decode a lettere from a byte
 def text_from_bits(bits, encoding='utf-8', errors='surrogatepass'):
     n = int(bits, 2)
-    return n.to_bytes((bitLen(n) + 7) // 8, 'big').decode(encoding, errors) or '\0'
+    b = n.to_bytes((bitLen(n) + 7) // 8, 'big') # Integer to Bytes methode does not work in micro python
+    r = b.decode(encoding, errors) or '\0'
+    return r
 
 #Method to recive the ligth intensity, the board have 2 sensor which is add and then returned
 def getLightIntensity():
