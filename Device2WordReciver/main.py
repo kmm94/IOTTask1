@@ -1,5 +1,5 @@
 import time
-
+import pycom
 
 # This is used to recive words from Device 1
 # protocol is: 
@@ -22,7 +22,7 @@ lightsensor = LTR329ALS01()
 humiAndTempSensor = SI7006A20()
 isRunning = True
 isReciving = False
-ligthThreshold = 1000
+ligthThreshold = 200
 
 #Metode to decode a lettere from a byte
 def text_from_bits(bits, encoding='utf-8', errors='surrogatepass'):
@@ -46,13 +46,15 @@ def sampleOneSecond():
         time.sleep(1)
         return "0"
 
+
+pycom.heartbeat(False)
 recivedText = ""
 
 while isRunning:
     print('Device is ready to recive')
     print("waiting for signal...")
     while(isReciving == False): # Sampling the lightIntensity, waiting for the start signal which is ligth on for 5 sec
-        if(getLightIntensity > ligthThreshold):
+        if(getLightIntensity() > ligthThreshold):
             recivedText = ""
             isReciving = True
             break
