@@ -24,10 +24,17 @@ isRunning = True
 isReciving = False
 ligthThreshold = 200
 
+def bitLen(int_type):
+    length = 0
+    while (int_type):
+        int_type >>= 1
+        length += 1
+    return(length)
+
 #Metode to decode a lettere from a byte
 def text_from_bits(bits, encoding='utf-8', errors='surrogatepass'):
     n = int(bits, 2)
-    return n.to_bytes((n.bit_length() + 7) // 8, 'big').decode(encoding, errors) or '\0'
+    return n.to_bytes((bitLen(n) + 7) // 8, 'big').decode(encoding, errors) or '\0'
 
 #Method to recive the ligth intensity, the board have 2 sensor which is add and then returned
 def getLightIntensity():
@@ -62,7 +69,7 @@ while isRunning:
     startTime = time.time()
     timer = 0
 
-    while timer <= 5: # Waiting 5 sec for the start signal to end
+    while timer < 6: # Waiting 5 sec for the start signal to end
         timer = time.time() - startTime
         # Alternertive the start signal could be changed to 5 sec on follow by off 1 sec then the device could sync the moment the ligth turns off 
     
@@ -72,7 +79,7 @@ while isRunning:
         counter +=1
         bit = sampleOneSecond() 
         byte += bit
-        print("Recived: " + bit + "Collecting Byte: " +byte)
+        print("Recived: " + bit + " Collecting Byte: " +byte)
         if(byte == "00000000"): #End Pattern
             isReciving = False
             print("An 'End of transsmission' was recived connection terminated")
@@ -80,7 +87,7 @@ while isRunning:
             print(recivedText)
             break
 
-        if(counter <= 8): #Putting 8 bits together to form one byte
+        if(counter >= 8): #Putting 8 bits together to form one byte
             recivedText += text_from_bits(byte)
             print("Text recived so far:")
             print(recivedText)
