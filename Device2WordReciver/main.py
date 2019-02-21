@@ -47,10 +47,10 @@ def getLightIntensity():
 # if the lightintensity is below the ligthTreshold the methode returns 0
 def sampleOneSecond():
     if(getLightIntensity() > ligthThreshold):
-        time.sleep(1)
+        #time.sleep(1)
         return "1"
     else:
-        time.sleep(1)
+        #time.sleep(1)
         return "0"
 
 
@@ -80,6 +80,7 @@ while isRunning:
         bit = sampleOneSecond() 
         byte += bit
         print("Recived: " + bit + " Collecting Byte: " +byte)
+        time.sleep(1) # Moved sleep to here from 'sampleOneSecond()' to easen the debugging, the recived bit will be show immediately
         if(byte == "00000000"): #End Pattern
             isReciving = False
             print("An 'End of transsmission' was recived connection terminated")
