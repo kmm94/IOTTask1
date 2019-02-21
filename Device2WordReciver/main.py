@@ -65,6 +65,7 @@ while isRunning:
         # Alternertive the start signal could be changed to 5 sec on follow by off 1 sec then the device could sync the moment the ligth turns off 
     
     counter = 0 #counting bits recived
+    byte = ""
     while isReciving: 
         counter +=1
         bit = sampleOneSecond() 
@@ -76,11 +77,13 @@ while isRunning:
             print("Text Recived:")
             print(recivedText)
             break
-        if(counter <= 8):
+
+        if(counter <= 8): #Putting 8 bits together to form one byte
             recivedText += text_from_bits(byte)
             print("Text recived so far:")
             print(recivedText)
             counter = 0
+            byte = ""
 
 
 
