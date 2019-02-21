@@ -24,24 +24,69 @@ isRunning = True
 isReciving = False
 ligthThreshold = 1000
 
+#Metode to decode a lettere from a byte
 def text_from_bits(bits, encoding='utf-8', errors='surrogatepass'):
     n = int(bits, 2)
     return n.to_bytes((n.bit_length() + 7) // 8, 'big').decode(encoding, errors) or '\0'
 
+#Method to recive the ligth intensity, the board have 2 sensor which is add and then returned
+def getLightIntensity():
+    lightTuple = lightsensor.light()
+    lightIntensity = lightTuple[0]+lightTuple[1]
+    return lightIntensity
+
+# Method reads the light intensity and waites one second before returning the bit
+# if the lightintensity is above the ligthTreshold the methode returns 1
+# if the lightintensity is below the ligthTreshold the methode returns 0
+def sampleOneSecond():
+    if(getLightIntensity() > ligthThreshold):
+        time.sleep(1)
+        return "1"
+    else:
+        time.sleep(1)
+        return "0"
+
+recivedText = ""
+
 while isRunning:
     print('Device is ready to recive')
-    while(isReciving == False):
-        lightTuple = lightsensor.light()
-        lightIntensity = lightTuple[0]+lightTuple[1]
-        if(lightIntensity > ligthThreshold):
+    print("waiting for signal...")
+    while(isReciving == False): # Sampling the lightIntensity, waiting for the start signal which is ligth on for 5 sec
+        if(getLightIntensity > ligthThreshold):
+            recivedText = ""
+            isReciving = True
             break
     print('reciving')
-    timer = time.time
-    while timer <= 5:
-        timer = time.time
+    startTime = time.time()
+    timer = 0
+
+    while timer <= 5: # Waiting 5 sec for the start signal to end
+        timer = time.time() - startTime
+        # Alternertive the start signal could be changed to 5 sec on follow by off 1 sec then the device could sync the moment the ligth turns off 
     
-        
+    counter = 0 #counting bits recived
+    while isReciving: 
+        counter +=1
+        bit = sampleOneSecond() 
+        byte += bit
+        print("Recived: " + bit + "Collecting Byte: " +byte)
+        if(byte == "00000000"): #End Pattern
+            isReciving = False
+            print("An 'End of transsmission' was recived connection terminated")
+            print("Text Recived:")
+            print(recivedText)
+            break
+        if(counter <= 8):
+            recivedText += text_from_bits(byte)
+            print("Text recived so far:")
+            print(recivedText)
+            counter = 0
+
+
+
     
+
+
 
 
 
