@@ -1,19 +1,21 @@
 import time
 import pycom as pyc #might not be correct import!
 import binascii
+import EncoderDecoder
 
 #This used to send ascii carraktor to an ambient ligte sensor 
 
-def zfill(s, width):
-    if len(s) < width:
-        return ("0" * (width - len(s))) + s
-    else:
-        return s
-
 # Method to encode the text to binary
-def text_to_bits(text, encoding='utf-8', errors='surrogatepass'):
-    bits = bin(int.from_bytes(text.encode(encoding, errors), 'big'))[2:]
-    return zfill(bits, 8 * ((len(bits) + 7) // 8))
+def getBitValue(letter):
+    bitvalue = ""
+    bitvalue = EncoderDecoder.dataEncoding[letter]
+    return bitvalue
+
+def textToBits(text):
+    BitString = "" 
+    for letter in text:
+        BitString += getBitValue(letter)
+    return BitString
 
 #turns light on for one sec
 def LightOn():
@@ -47,7 +49,7 @@ while (isRunning):
     if(text == 'Exit'):
         break
     if(text != ""):
-        bitString = text_to_bits(text)
+        bitString = textToBits(text)
         print(bitString)
         InitiateConnection()
         for bit in str(bitString):

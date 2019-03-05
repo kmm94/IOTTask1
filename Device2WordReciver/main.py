@@ -1,5 +1,6 @@
 import time
 import pycom
+import EncoderDecoder
 
 # This is used to recive words from Device 1
 # protocol is: 
@@ -24,19 +25,12 @@ isRunning = True
 isReciving = False
 ligthThreshold = 200
 
-def bitLen(int_type):
-    length = 0
-    while (int_type):
-        int_type >>= 1
-        length += 1
-    return(length)
-
 #Metode to decode a lettere from a byte
-def text_from_bits(bits, encoding='utf-8', errors='surrogatepass'):
-    n = int(bits, 2)
-    b = n.to_bytes((bitLen(n) + 7) // 8, 'big') # Integer to Bytes methode does not work in micro python
-    r = b.decode(encoding, errors) or '\0'
-    return r
+def getWordvalue(bits):
+    word = ""
+    print(byte)
+    word = EncoderDecoder.dataDecoding[byte]
+    return word
 
 #Method to recive the ligth intensity, the board have 2 sensor which is add and then returned
 def getLightIntensity():
@@ -91,7 +85,7 @@ while isRunning:
             break
 
         if(counter >= 8): #Putting 8 bits together to form one byte
-            recivedText += text_from_bits(byte)
+            recivedText += getWordvalue(byte)
             print("Text recived so far:")
             print(recivedText)
             counter = 0
