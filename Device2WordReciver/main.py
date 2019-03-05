@@ -28,7 +28,7 @@ ligthThreshold = 200
 #Metode to decode a lettere from a byte
 def getWordvalue(bits):
     word = ""
-    word = EncoderDecoder.dataDecoding[byte]
+    word = EncoderDecoder.dataDecoding[bits]
     return word
 
 #Method to recive the ligth intensity, the board have 2 sensor which is add and then returned
