@@ -28,7 +28,6 @@ ligthThreshold = 200
 #Metode to decode a lettere from a byte
 def getWordvalue(bits):
     word = ""
-    print(byte)
     word = EncoderDecoder.dataDecoding[byte]
     return word
 
