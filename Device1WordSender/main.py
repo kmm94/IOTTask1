@@ -6,15 +6,10 @@ import EncoderDecoder
 #This used to send ascii carraktor to an ambient ligte sensor 
 
 # Method to encode the text to binary
-def getBitValue(letter):
-    bitvalue = ""
-    bitvalue = EncoderDecoder.dataEncoding[letter]
-    return bitvalue
-
 def textToBits(text):
     BitString = "" 
     for letter in text:
-        BitString += getBitValue(letter)
+        BitString += EncoderDecoder.dataEncoding[letter]
     return BitString
 
 #turns light on for one sec
